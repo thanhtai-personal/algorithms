@@ -50,17 +50,24 @@ const pratt = (n) => {
       isAddP = true
     }
   }
+
+  const nextPQ = () => {
+    if (isAddP) {
+      q--
+      isAddP = false
+    } else {
+      p--
+      isAddP = true
+    }
+  }
+
   return {
     jumpSteps,
-    getNewJumpSteps: (jumpSteps) => {
-      if (isAddP) {
-        q--
-        isAddP = false
-      } else {
-        p--
-        isAddP = true
-      }
-      return parseInt(jumpSteps / (Math.pow(2, p) * Math.pow(3, q)))
+    getNewJumpSteps: (_jumpSteps) => {
+      nextPQ()
+      let nextJumpSteps = parseInt((Math.pow(2, p) * Math.pow(3, q)))
+      if (nextJumpSteps === _jumpSteps) nextPQ()
+      return parseInt((Math.pow(2, p) * Math.pow(3, q)))
     },
     stopCondition: 0
   }
@@ -73,10 +80,9 @@ const hibbard = (n) => {
     jumpSteps = (2 * jumpSteps) + 1 ;
   }
 
-
   return {
     jumpSteps,
-    getNewJumpSteps: (jumpSteps) => parseInt((jumpSteps - 1) / 2),
+    getNewJumpSteps: (_jumpSteps) => parseInt((_jumpSteps - 1) / 2),
     stopCondition: 0
   }
 }
@@ -97,10 +103,10 @@ console.log('shell sort - knuth:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13,
   , 15, knuth))
 console.log('shell sort - shell:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13, 33, 32, 50, 99, 77]
   , 15, shell))
-console.log('shell sort - pratt:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13, 33, 32, 50, 99, 77]
-  , 15, pratt))
-console.log('shell sort - hibbard:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13
+console.log('shell sort - hibbard:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13, 33, 32, 50, 99, 77]
+  , 15, hibbard))
+console.log('shell sort - pratt:', shellSort([1, 4, 32, 15, 45, 6, 8, 19, 4, 13
   , 33, 32, 50, 99, 77, 6, 77, 55, 33, 100
   , 34, 33, 51, 98, 78, 7, 76, 56, 34, 101
   , 35, 34, 52, 97, 79, 8, 75, 57, 35, 102]
-  , 40, hibbard))
+  , 40, pratt))
